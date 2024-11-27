@@ -9,6 +9,8 @@ public class ThingMove : MonoBehaviour
     public float moveDistance = 5f; // ระยะทางที่วัตถุจะเคลื่อนที่
     public float moveSpeed = 2f; // ความเร็วการเคลื่อนที่
 
+    public AudioSource moveSound; // เสียงที่เล่นขณะวัตถุกำลังเคลื่อนที่
+
     private Vector3 startPosition; // ตำแหน่งเริ่มต้นของวัตถุ
     private bool isMoving = false; // ตรวจสอบว่าวัตถุกำลังเคลื่อนที่หรือไม่
 
@@ -23,6 +25,12 @@ public class ThingMove : MonoBehaviour
         {
             Debug.LogError("Target Object is not assigned.");
         }
+
+        // ตรวจสอบว่าได้กำหนด AudioSource หรือไม่
+        if (moveSound == null)
+        {
+            Debug.LogError("Move sound is not assigned.");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,6 +39,12 @@ public class ThingMove : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isMoving = true; // เริ่มการเคลื่อนที่
+
+            // เล่นเสียงเคลื่อนที่ถ้ายังไม่ได้เล่น
+            if (moveSound != null && !moveSound.isPlaying)
+            {
+                moveSound.Play();
+            }
         }
     }
 
@@ -45,6 +59,20 @@ public class ThingMove : MonoBehaviour
             if (Vector3.Distance(startPosition, targetObject.position) >= moveDistance)
             {
                 isMoving = false; // หยุดการเคลื่อนที่
+
+                // หยุดเสียงเคลื่อนที่
+                if (moveSound != null && moveSound.isPlaying)
+                {
+                    moveSound.Stop();
+                }
+            }
+        }
+        else
+        {
+            // หยุดเสียงเคลื่อนที่หากไม่กำลังเคลื่อนที่
+            if (moveSound != null && moveSound.isPlaying)
+            {
+                moveSound.Stop();
             }
         }
     }

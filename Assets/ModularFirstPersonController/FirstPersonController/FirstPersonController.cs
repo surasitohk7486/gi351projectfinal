@@ -92,6 +92,19 @@ public class FirstPersonController : MonoBehaviour
 
     #endregion
 
+    #region Footstep Audio
+
+    public AudioClip walkSound;
+    public AudioClip sprintSound;
+    public AudioSource audioSource;
+    public float walkSoundInterval = 0.5f;  // Interval between walk sounds
+    public float sprintSoundInterval = 0.3f;  // Interval between sprint sounds
+
+    // Internal Variables
+    private float footstepTimer = 0f;
+
+    #endregion
+
     #region Jump
 
     public bool enableJump = true;
@@ -141,6 +154,14 @@ public class FirstPersonController : MonoBehaviour
         playerCamera.fieldOfView = fov;
         originalScale = transform.localScale;
         jointOriginalPos = joint.localPosition;
+
+        // Initialize AudioSource if not already assigned
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.loop = false;
+        }
 
         if (!unlimitedSprint)
         {
@@ -361,6 +382,45 @@ public class FirstPersonController : MonoBehaviour
         if(enableHeadBob)
         {
             HeadBob();
+        }
+
+        #region Footstep Sound
+
+        // Play walking sound
+        if (isWalking && isGrounded && !isSprinting)
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= walkSoundInterval)
+            {
+                PlayFootstepSound(walkSound);
+                footstepTimer = 0f;
+            }
+        }
+        // Play sprinting sound
+        else if (isSprinting && isGrounded)
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= sprintSoundInterval)
+            {
+                PlayFootstepSound(sprintSound);
+                footstepTimer = 0f;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f; // Reset the timer when not walking or sprinting
+        }
+
+        #endregion
+
+    }
+
+    private void PlayFootstepSound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
         }
     }
 

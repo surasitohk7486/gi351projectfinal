@@ -13,6 +13,8 @@ public class NoteInteract : MonoBehaviour
     public FirstPersonController playerController; // ตัวควบคุมผู้เล่น (เพื่อหยุดการเคลื่อนที่)
     public FlashLight flashlightController; // ตัวควบคุมไฟฉาย
 
+    public AudioSource interactSound; // เสียงเมื่อกดปุ่ม
+
     private bool isLookingAtNote = false; // ตรวจสอบว่าผู้เล่นกำลังมองกระดาษอยู่หรือไม่
     private bool isReading = false; // ตรวจสอบว่าผู้เล่นกำลังอ่านโน้ตอยู่
 
@@ -37,6 +39,7 @@ public class NoteInteract : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E)) // กด E เพื่ออ่าน
                 {
+                    PlayInteractSound(); // เล่นเสียง
                     StartReading();
                 }
             }
@@ -50,6 +53,7 @@ public class NoteInteract : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E)) // กด E อีกครั้งเพื่อปิด
             {
+                PlayInteractSound(); // เล่นเสียง
                 StopReading();
             }
         }
@@ -79,6 +83,14 @@ public class NoteInteract : MonoBehaviour
         if (flashlightController != null)
         {
             flashlightController.LockFlashlight(false);
+        }
+    }
+
+    private void PlayInteractSound()
+    {
+        if (interactSound != null)
+        {
+            interactSound.Play(); // เล่นเสียง
         }
     }
 }
