@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PadInteract : MonoBehaviour
 {
+    public FlashLight flashlightController;
+
     public string correctCode = "1234"; // รหัสที่ถูกต้อง
     public GameObject codeUI; // UI สำหรับใส่รหัส
     public TextMeshProUGUI codeDisplay; // Text แสดงรหัสที่ผู้เล่นกด
@@ -25,6 +27,8 @@ public class PadInteract : MonoBehaviour
     {
         codeUI.SetActive(false); // ซ่อน UI ตอนเริ่มเกม
         feedbackText.gameObject.SetActive(false); // ซ่อนข้อความแจ้งเตือน
+
+        
     }
 
     void Update()
@@ -54,7 +58,7 @@ public class PadInteract : MonoBehaviour
             feedbackText.gameObject.SetActive(false); // ซ่อนข้อความ "กด E เพื่ออินเทอร์แอค"
         }
 
-        if (isActive && Input.GetKeyDown(KeyCode.E)) // กด E เพื่อปิด UI
+        if (isActive && Input.GetKeyDown(KeyCode.Escape)) // กด E เพื่อปิด UI
         {
             CloseCodeUI();
         }
@@ -68,6 +72,15 @@ public class PadInteract : MonoBehaviour
         codeDisplay.text = ""; // ล้างหน้าจอ
         feedbackText.gameObject.SetActive(false); // ซ่อนข้อความแจ้งเตือน
         playerController.enabled = false; // ปิดการควบคุมผู้เล่น
+
+        if (flashlightController != null)
+        {
+            flashlightController.LockFlashlight(true);
+        }
+
+        Cursor.lockState = CursorLockMode.None; // ปลดล็อก Cursor
+        Cursor.visible = true; // ทำให้ Cursor มองเห็นได้
+        Debug.Log("Code UI opened successfully.");
     }
 
     public void CloseCodeUI()
@@ -75,11 +88,20 @@ public class PadInteract : MonoBehaviour
         isActive = false;
         codeUI.SetActive(false); // ซ่อน UI
         playerController.enabled = true; // เปิดการควบคุมผู้เล่นอีกครั้ง
+
+        if (flashlightController != null)
+        {
+            flashlightController.LockFlashlight(false);
+        }
+
+        Cursor.lockState = CursorLockMode.Locked; // ล็อก Cursor ให้อยู่ตรงกลางหน้าจอ
+        Cursor.visible = false; // ทำให้ Cursor หายไป
+        Debug.Log("Code UI closed.");
     }
 
     public void AddDigit(string digit)
     {
-        if (currentInput.Length < 4) // จำกัดให้กรอกได้ 4 ตัว
+        if (currentInput.Length <= 4) // จำกัดให้กรอกได้ 4 ตัว
         {
             currentInput += digit;
             codeDisplay.text = currentInput;
@@ -95,23 +117,24 @@ public class PadInteract : MonoBehaviour
     {
         if (currentInput == correctCode) // รหัสถูกต้อง
         {
-            feedbackText.text = "Correct!";
-            feedbackText.color = Color.green;
-            feedbackText.gameObject.SetActive(true);
+            codeDisplay.text = "Correct!";
+            codeDisplay.color = Color.green;
+            
 
             yield return new WaitForSeconds(1f); // รอ 1 วินาที
             OpenDoor(); // เปิดประตู
         }
         else // รหัสผิด
         {
-            feedbackText.text = "Incorrect!";
-            feedbackText.color = Color.red;
-            feedbackText.gameObject.SetActive(true);
+            codeDisplay.text = "Incorrect!";
+            codeDisplay.color = Color.red;
+            
 
-            yield return new WaitForSeconds(3f); // แสดงข้อความแจ้งเตือน 3 วินาที
-            feedbackText.gameObject.SetActive(false);
+            yield return new WaitForSeconds(1f); // แสดงข้อความแจ้งเตือน 3 วินาที
+            
             currentInput = ""; // รีเซ็ตรหัส
             codeDisplay.text = "";
+            codeDisplay.color = Color.black;
         }
     }
 

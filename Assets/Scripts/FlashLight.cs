@@ -11,6 +11,10 @@ public class FlashLight : MonoBehaviour
 
     private bool isLocked = false; // ตัวแปรควบคุมการล็อกไฟฉาย
 
+    public float batteryLevel = 100f; // แบตเตอรี่เริ่มต้น (100%)
+    public float batteryConsumptionRate = 1f; // อัตราการลดแบตเตอรี่ต่อวินาที
+    public float maxBatteryLevel = 100f;
+
     // ตัวแปรสำหรับเสียง
     public AudioClip flashlightOnSound;
     public AudioClip flashlightOffSound;
@@ -48,8 +52,27 @@ public class FlashLight : MonoBehaviour
                 on = false;
             }
         }
+
+        if (on)
+        {
+            batteryLevel -= batteryConsumptionRate * Time.deltaTime;
+            batteryLevel = Mathf.Max(batteryLevel, 0); // ไม่ให้แบตเตอรี่ติดลบ
+
+            if (batteryLevel == 0)
+            {
+                flashlight.SetActive(false); // ปิดไฟฉายเมื่อแบตหมด
+                PlaySound(flashlightOffSound);
+                off = true;
+                on = false;
+            }
+        }
     }
 
+    public void IncreaseBattery(float amount)
+    {
+        batteryLevel += amount;
+        batteryLevel = Mathf.Min(batteryLevel, maxBatteryLevel); // ไม่ให้เกินค่าสูงสุด
+    }
     // ฟังก์ชันล็อกไฟฉาย
     public void LockFlashlight(bool lockState)
     {
