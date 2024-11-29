@@ -19130,7 +19130,7 @@ GameObject:
   - component: {fileID: 1176442917}
   - component: {fileID: 1176442916}
   m_Layer: 5
-  m_Name: EforDoor
+  m_Name: EforDoorEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

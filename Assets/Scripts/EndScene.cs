@@ -37,7 +37,7 @@ public class EndScene : MonoBehaviour
                 if (interactText != null)
                 {
                     interactText.gameObject.SetActive(true);
-                    interactText.text = "Press E to Interact";
+                    interactText.text = "Press E to Open";
                 }
 
                 // ตรวจสอบการกดปุ่ม E
