@@ -16,6 +16,12 @@ using UnityEngine.UI;
 
 public class FirstPersonController : MonoBehaviour
 {
+    private bool isLocked = false; // สถานะล็อก
+    private float lockDuration = 0f; // ระยะเวลาที่ล็อกผู้เล่น
+    private float lockTimer = 0f; // ตัวจับเวลาการล็อก
+
+    private Vector3 lockedCameraRotation = Vector3.zero;
+
     private Rigidbody rb;
 
     #region Camera Movement Variables
@@ -167,6 +173,24 @@ public class FirstPersonController : MonoBehaviour
         {
             sprintRemaining = sprintDuration;
             sprintCooldownReset = sprintCooldown;
+        }
+    }
+
+    public void LockPlayer(float duration)
+    {
+        isLocked = true;
+        lockDuration = duration;
+        lockTimer = duration;
+
+        // หยุดการเคลื่อนไหวของผู้เล่น
+        playerCanMove = false;
+        cameraCanMove = false;
+
+        // ตั้งค่ากล้องให้อยู่ที่ Rotation = 0
+        if (playerCamera != null)
+        {
+            lockedCameraRotation = Vector3.zero;
+            playerCamera.transform.localEulerAngles = lockedCameraRotation;
         }
     }
 
@@ -413,6 +437,28 @@ public class FirstPersonController : MonoBehaviour
 
         #endregion
 
+        if (isLocked)
+        {
+            lockTimer -= Time.deltaTime;
+
+            // บังคับให้มองไปในแกน Z
+            Vector3 forwardDirection = new Vector3(0, 0, 1); // มองไปทาง Z
+            transform.rotation = Quaternion.LookRotation(forwardDirection);
+
+            if (playerCamera != null)
+            {
+                playerCamera.transform.localEulerAngles = lockedCameraRotation;
+            }
+
+            if (lockTimer <= 0f)
+            {
+                isLocked = false;
+
+                // คืนค่าความสามารถในการเคลื่อนไหว
+                playerCanMove = true;
+                cameraCanMove = true;
+            }
+        }
     }
 
     private void PlayFootstepSound(AudioClip clip)

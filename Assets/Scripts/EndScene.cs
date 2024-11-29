@@ -29,7 +29,7 @@ public class EndScene : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, raycastDistance))
         {
             // ตรวจสอบ Tag ของวัตถุ
-            if (hit.collider.CompareTag("Door"))
+            if (hit.collider.CompareTag("DoorEnd"))
             {
                 canInteract = true;
 
