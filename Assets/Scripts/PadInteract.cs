@@ -27,8 +27,6 @@ public class PadInteract : MonoBehaviour
     {
         codeUI.SetActive(false); // ซ่อน UI ตอนเริ่มเกม
         feedbackText.gameObject.SetActive(false); // ซ่อนข้อความแจ้งเตือน
-
-        
     }
 
     void Update()

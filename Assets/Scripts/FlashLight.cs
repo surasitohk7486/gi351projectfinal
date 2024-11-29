@@ -1,24 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class FlashLight : MonoBehaviour
 {
-    public GameObject flashlight;
+    [SerializeField] private GameObject flashlight;
 
-    public bool on;
-    public bool off;
+    [SerializeField] private bool on;
+    [SerializeField] private bool off;
 
-    private bool isLocked = false; // ตัวแปรควบคุมการล็อกไฟฉาย
+    [SerializeField] private bool isLocked = false; // ตัวแปรควบคุมการล็อกไฟฉาย
 
     public float batteryLevel = 100f; // แบตเตอรี่เริ่มต้น (100%)
-    public float batteryConsumptionRate = 1f; // อัตราการลดแบตเตอรี่ต่อวินาที
-    public float maxBatteryLevel = 100f;
+    [SerializeField] private float batteryConsumptionRate = 1f; // อัตราการลดแบตเตอรี่ต่อวินาที
+    [SerializeField] private float maxBatteryLevel = 100f;
 
     // ตัวแปรสำหรับเสียง
-    public AudioClip flashlightOnSound;
-    public AudioClip flashlightOffSound;
-    public AudioSource audioSource;
+    [SerializeField] private AudioClip flashlightOnSound;
+    [SerializeField] private AudioClip flashlightOffSound;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private GameObject pickupText;
+    [SerializeField] private TextMeshProUGUI batteryPercentageText;
+
+    [SerializeField] private LayerMask batteryLayer;
 
     private void Start()
     {
@@ -30,6 +35,8 @@ public class FlashLight : MonoBehaviour
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+
+        pickupText.SetActive(false);
     }
 
     private void Update()
@@ -66,13 +73,49 @@ public class FlashLight : MonoBehaviour
                 on = false;
             }
         }
+
+        UpdateBatteryUI();
+
+        RaycastPickup();
     }
+
+    private void RaycastPickup()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f, batteryLayer)) // ตรวจจับไอเท็มในระยะ 3 เมตร
+        {
+            BatteryItem batteryItem = hit.collider.GetComponent<BatteryItem>(); // ตรวจสอบว่า Object ที่ชนคือไอเท็มแบตเตอรี่หรือไม่
+            if (batteryItem != null)
+            {
+                // แสดงข้อความ UI หรืออินเตอร์เฟซว่าไอเท็มนี้สามารถเก็บได้
+
+                pickupText.SetActive(true); // เปลี่ยนข้อความ UI
+                // เมื่อกดปุ่ม E เก็บไอเท็ม
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    IncreaseBattery(batteryItem.batteryAmount); // เพิ่มแบตเตอรี่ให้กับไฟฉาย
+                    Destroy(hit.collider.gameObject); // ทำลายไอเท็มหลังจากเก็บ
+                }
+            }
+            else
+            {
+                pickupText.SetActive(false);
+            }
+        }
+        else
+        {
+            pickupText.SetActive(false);
+        }
+    }
+
 
     public void IncreaseBattery(float amount)
     {
         batteryLevel += amount;
         batteryLevel = Mathf.Min(batteryLevel, maxBatteryLevel); // ไม่ให้เกินค่าสูงสุด
     }
+
     // ฟังก์ชันล็อกไฟฉาย
     public void LockFlashlight(bool lockState)
     {
@@ -86,6 +129,13 @@ public class FlashLight : MonoBehaviour
             off = true;
             on = false;
         }
+    }
+
+    private void UpdateBatteryUI()
+    {
+        // แสดงเปอร์เซ็นต์แบตเตอรี่
+        float batteryPercentage = (batteryLevel / maxBatteryLevel) * 100f;
+        batteryPercentageText.text = Mathf.RoundToInt(batteryPercentage) + "%"; // อัปเดตข้อความ UI
     }
 
     // ฟังก์ชันสำหรับเล่นเสียง
