@@ -48,15 +48,17 @@ public class MusicBox : MonoBehaviour
         {
             if (audio.isPlaying)
             {
-                Debug.Log("Not Play");
+                Debug.Log("Music paused");
                 audio.Pause();
+
                 if (playerFlashlight != null)
                 {
-                    playerFlashlight.LockFlashlight(false); // ปลดล็อกไฟฉาย
+                    playerFlashlight.LockFlashlight(false); // ปลดล็อกไฟฉายเมื่อเพลงหยุดชั่วคราว
                 }
             }
             else
             {
+                Debug.Log("Music playing");
                 // ล็อกผู้เล่นให้หันไปที่ MusicBox
                 Vector3 directionToMusicBox = (musicBox.transform.position - playerController.transform.position).normalized;
                 playerController.LockPlayerUntil(audio.clip.length, directionToMusicBox);
@@ -70,7 +72,27 @@ public class MusicBox : MonoBehaviour
                 musicBoxAnimator.SetTrigger("OpenBox");
                 isOpen = true;
                 audio.Play();
+
+                // เรียก Coroutine เพื่อตรวจสอบการเล่นเพลง
+                StartCoroutine(WaitForMusicToEnd(audio, playerFlashlight));
             }
+        }
+        
+    }
+    private IEnumerator WaitForMusicToEnd(AudioSource audio, FlashLight playerFlashlight)
+    {
+        // รอจนกว่าเพลงจะหยุดเล่น
+        while (audio.isPlaying)
+        {
+            yield return null; // รอ 1 เฟรม
+        }
+
+        Debug.Log("Music ended");
+
+        // ปลดล็อกไฟฉายเมื่อเพลงจบ
+        if (playerFlashlight != null)
+        {
+            playerFlashlight.LockFlashlight(false);
         }
     }
 }

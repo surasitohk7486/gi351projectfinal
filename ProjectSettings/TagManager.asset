@@ -9,6 +9,7 @@ TagManager:
   - Door
   - DoorEnd
   - MusicBox
+  - Dummy
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Door
   - MusicBox
   - Key
-  - 
+  - Dummy
   - 
   - 
   - 
