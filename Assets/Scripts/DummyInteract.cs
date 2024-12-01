@@ -9,6 +9,7 @@ public class DummyInteract : MonoBehaviour
     [SerializeField] private LayerMask interactableLayer; // เลเยอร์สำหรับตรวจจับ Object ที่สามารถ Interact ได้
     [SerializeField] private GameObject interactionUI; // UI แสดงข้อความ "Press E to Interact"
     [SerializeField] private GameObject objectToActivate; // Object ที่ต้องการทำให้ Active
+    [SerializeField] private GameObject objectToActivate2;
     [SerializeField] private GameObject objectToDeactivate; // Object ที่ต้องการให้หายไป (ซ่อนหรือทำลาย)
     [SerializeField] private AudioSource audio;
 
@@ -52,6 +53,7 @@ public class DummyInteract : MonoBehaviour
         if (objectToActivate != null)
         {
             objectToActivate.SetActive(true); // ทำให้ Object ที่ตั้งไว้ Active
+            objectToActivate2.SetActive(true);
         }
 
         if (objectToDeactivate != null)

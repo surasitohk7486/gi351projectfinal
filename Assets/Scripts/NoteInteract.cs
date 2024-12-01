@@ -1,72 +1,86 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class NoteInteract : MonoBehaviour
 {
     public Camera playerCamera; // กล้องของผู้เล่น
-    public float interactionDistance = 5f; // ระยะที่สามารถตรวจจับได้
-    public LayerMask noteLayer; // เลเยอร์สำหรับกระดาษโน้ต
+    public float interactionDistance = 5f; // ระยะตรวจจับ
+    public LayerMask noteLayer; // เลเยอร์ของโน้ต
 
-    public GameObject interactionUI; // UI แสดงข้อความ "กด E เพื่ออ่าน"
-    public GameObject noteUI; // UI กระดาษโน้ต
-    public FirstPersonController playerController; // ตัวควบคุมผู้เล่น (เพื่อหยุดการเคลื่อนที่)
+    public GameObject interactionUI; // UI "กด E เพื่ออ่าน"
+    public FirstPersonController playerController; // ตัวควบคุมผู้เล่น
     public FlashLight flashlightController; // ตัวควบคุมไฟฉาย
+    public AudioSource interactSound; // เสียงตอนกดปุ่ม
 
-    public AudioSource interactSound; // เสียงเมื่อกดปุ่ม
-
-    private bool isLookingAtNote = false; // ตรวจสอบว่าผู้เล่นกำลังมองกระดาษอยู่หรือไม่
-    private bool isReading = false; // ตรวจสอบว่าผู้เล่นกำลังอ่านโน้ตอยู่
+    private bool isReading = false; // ตรวจสอบว่าผู้เล่นกำลังอ่านอยู่
+    private GameObject currentNoteUI; // UI ของโน้ตที่แสดงผลอยู่
 
     void Start()
     {
         interactionUI.SetActive(false);
-        noteUI.SetActive(false);
     }
 
     void Update()
     {
         if (!isReading)
         {
-            // Raycast จากกล้องของผู้เล่น
-            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            CheckForNoteInteraction();
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            StopReading();
+        }
+    }
 
-            if (Physics.Raycast(ray, out hit, interactionDistance, noteLayer))
+    private void CheckForNoteInteraction()
+    {
+        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionDistance, noteLayer))
+        {
+            interactionUI.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                isLookingAtNote = true;
-                interactionUI.SetActive(true); // แสดง UI "กด E เพื่ออ่าน"
+                PlayInteractSound();
 
-                if (Input.GetKeyDown(KeyCode.E)) // กด E เพื่ออ่าน
+                // รับข้อมูล NoteData จากโน้ตที่ตรวจจับได้
+                Note note = hit.collider.GetComponent<Note>();
+                if (note != null)
                 {
-                    PlayInteractSound(); // เล่นเสียง
-                    StartReading();
+                    StartReading(note.noteData);
                 }
-            }
-            else
-            {
-                isLookingAtNote = false;
-                interactionUI.SetActive(false);
             }
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.E)) // กด E อีกครั้งเพื่อปิด
-            {
-                PlayInteractSound(); // เล่นเสียง
-                StopReading();
-            }
+            interactionUI.SetActive(false);
         }
     }
 
-    private void StartReading()
+    private void StartReading(NoteData noteData)
     {
         isReading = true;
-        noteUI.SetActive(true); // แสดง UI กระดาษโน้ต
-        interactionUI.SetActive(false); // ซ่อน UI "กด E เพื่ออ่าน"
-        playerController.enabled = false; // ปิดการควบคุมผู้เล่น
+        interactionUI.SetActive(false);
 
-        // ปิดการควบคุมไฟฉาย
+        // แสดง UI ของโน้ต
+        currentNoteUI = Instantiate(noteData.noteUIPrefab);
+
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas != null)
+        {
+            currentNoteUI.transform.SetParent(canvas.transform, false); // ใช้ false เพื่อรักษา scale เดิม
+        }
+        else
+        {
+            Debug.LogWarning("Canvas not found. Ensure there is a Canvas in the scene.");
+        }
+
+        playerController.enabled = false;
+
         if (flashlightController != null)
         {
             flashlightController.LockFlashlight(true);
@@ -76,10 +90,9 @@ public class NoteInteract : MonoBehaviour
     private void StopReading()
     {
         isReading = false;
-        noteUI.SetActive(false); // ซ่อน UI กระดาษโน้ต
-        playerController.enabled = true; // เปิดการควบคุมผู้เล่นอีกครั้ง
+        Destroy(currentNoteUI); // ทำลาย UI โน้ตปัจจุบัน
+        playerController.enabled = true;
 
-        // เปิดการควบคุมไฟฉาย
         if (flashlightController != null)
         {
             flashlightController.LockFlashlight(false);
@@ -90,7 +103,7 @@ public class NoteInteract : MonoBehaviour
     {
         if (interactSound != null)
         {
-            interactSound.Play(); // เล่นเสียง
+            interactSound.Play();
         }
     }
 }
