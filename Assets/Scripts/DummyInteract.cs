@@ -10,6 +10,7 @@ public class DummyInteract : MonoBehaviour
     [SerializeField] private GameObject interactionUI; // UI แสดงข้อความ "Press E to Interact"
     [SerializeField] private GameObject objectToActivate; // Object ที่ต้องการทำให้ Active
     [SerializeField] private GameObject objectToDeactivate; // Object ที่ต้องการให้หายไป (ซ่อนหรือทำลาย)
+    [SerializeField] private AudioSource audio;
 
     int count = 0;
 
@@ -35,6 +36,7 @@ public class DummyInteract : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E)) // หากผู้เล่นกด E
                 {
                     InteractWithObjectAction(); // เรียกฟังก์ชัน Interact
+                    audio.Play();
                 }
             }
         }

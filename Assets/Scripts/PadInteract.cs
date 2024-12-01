@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class PadInteract : MonoBehaviour
 {
+    [SerializeField] private AudioSource audio;
     public FlashLight flashlightController;
 
-    public string correctCode = "1234"; // รหัสที่ถูกต้อง
+    public string correctCode = "5842"; // รหัสที่ถูกต้อง
     public GameObject codeUI; // UI สำหรับใส่รหัส
     public TextMeshProUGUI codeDisplay; // Text แสดงรหัสที่ผู้เล่นกด
     public TextMeshProUGUI feedbackText; // ข้อความแจ้งเตือน (รหัสผิด)
@@ -144,7 +145,7 @@ public class PadInteract : MonoBehaviour
 
         if (doorAnimator != null)
         {
-            // audio.Play();
+            audio.Play();
             doorAnimator.SetTrigger("Open1"); // เล่นแอนิเมชันที่ตั้งไว้ใน Animator
             CloseCodeUI();
             Debug.Log("Door opened: " + door.name);
