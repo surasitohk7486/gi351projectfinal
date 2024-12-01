@@ -10,6 +10,7 @@ public class ThingMove : MonoBehaviour
     public float moveSpeed = 2f; // ความเร็วการเคลื่อนที่
 
     public AudioSource moveSound; // เสียงที่เล่นขณะวัตถุกำลังเคลื่อนที่
+    public AudioSource lightSound;
 
     private Vector3 startPosition; // ตำแหน่งเริ่มต้นของวัตถุ
     private bool isMoving = false; // ตรวจสอบว่าวัตถุกำลังเคลื่อนที่หรือไม่
@@ -44,6 +45,7 @@ public class ThingMove : MonoBehaviour
             if (moveSound != null && !moveSound.isPlaying)
             {
                 moveSound.Play();
+                lightSound.Play();
             }
         }
     }

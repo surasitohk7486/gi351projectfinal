@@ -36,6 +36,7 @@ public class LightController : MonoBehaviour
         {
             flashLight.LockFlashlight(true); // ล็อกไฟฉายทันที
         }
+        yield return new WaitForSeconds(3f);
 
         // ปิดไฟทีละดวง
         foreach (Light light in lights)

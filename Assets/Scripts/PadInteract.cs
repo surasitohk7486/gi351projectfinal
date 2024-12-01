@@ -23,6 +23,8 @@ public class PadInteract : MonoBehaviour
     public float interactionDistance = 5f; // ระยะที่สามารถมองเห็นได้
     public LayerMask padLayer; // เลเยอร์สำหรับตรวจจับแพด
 
+    public Animator Animator;
+
     void Start()
     {
         codeUI.SetActive(false); // ซ่อน UI ตอนเริ่มเกม
@@ -120,7 +122,7 @@ public class PadInteract : MonoBehaviour
             
 
             yield return new WaitForSeconds(1f); // รอ 1 วินาที
-            OpenDoor(); // เปิดประตู
+            OpenDoor(door); // เปิดประตู
         }
         else // รหัสผิด
         {
@@ -136,10 +138,20 @@ public class PadInteract : MonoBehaviour
         }
     }
 
-    public void OpenDoor()
+    public void OpenDoor(GameObject door)
     {
-        // ตัวอย่าง: ซ่อนประตูหรือเปลี่ยนสถานะ
-        door.SetActive(false);
-        CloseCodeUI();
+        Animator doorAnimator = door.GetComponent<Animator>(); // ดึง Animator จากประตู
+
+        if (doorAnimator != null)
+        {
+            // audio.Play();
+            doorAnimator.SetTrigger("Open1"); // เล่นแอนิเมชันที่ตั้งไว้ใน Animator
+            CloseCodeUI();
+            Debug.Log("Door opened: " + door.name);
+        }
+        else
+        {
+            Debug.LogWarning("No Animator found on the door: " + door.name);
+        }
     }
 }

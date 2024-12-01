@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class DoorOpen : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class DoorOpen : MonoBehaviour
     [SerializeField] private Camera playerCamera; // กล้องของผู้เล่น
     [SerializeField] private float interactionDistance = 5f; // ระยะการตรวจจับ
     [SerializeField] private bool doorIsOpen = false;
+    [SerializeField] private AudioSource audio;
 
     private bool isLookingAtDoor = false; // เช็คว่ากำลังมองที่ประตูหรือไม่
     private GameObject currentDoor; // ประตูที่กำลังมองอยู่
@@ -33,6 +36,7 @@ public class DoorOpen : MonoBehaviour
                 }
             }
         }
+
         else
         {
             isLookingAtDoor = false; // ไม่มองที่ประตู
@@ -47,10 +51,12 @@ public class DoorOpen : MonoBehaviour
 
         if (doorAnimator != null)
         {
+            audio.Play();
             doorIsOpen = true;
-            doorAnimator.SetTrigger("Open"); // เล่นแอนิเมชันที่ตั้งไว้ใน Animator
+            doorAnimator.SetBool("Open", true); // เล่นแอนิเมชันที่ตั้งไว้ใน Animator
             Debug.Log("Door opened: " + door.name);
         }
+
         else
         {
             Debug.LogWarning("No Animator found on the door: " + door.name);
