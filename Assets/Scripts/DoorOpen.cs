@@ -8,6 +8,7 @@ public class DoorOpen : MonoBehaviour
     [SerializeField] private LayerMask doorLayer; // เลเยอร์ที่ใช้สำหรับตรวจจับประตู
     [SerializeField] private Camera playerCamera; // กล้องของผู้เล่น
     [SerializeField] private float interactionDistance = 5f; // ระยะการตรวจจับ
+    [SerializeField] private bool doorIsOpen = false;
 
     private bool isLookingAtDoor = false; // เช็คว่ากำลังมองที่ประตูหรือไม่
     private GameObject currentDoor; // ประตูที่กำลังมองอยู่
@@ -20,7 +21,7 @@ public class DoorOpen : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionDistance, doorLayer))
         {
-            if (hit.collider.CompareTag("Door")) // ตรวจสอบว่าชนกับประตู
+            if (hit.collider.CompareTag("Door") && !doorIsOpen) // ตรวจสอบว่าชนกับประตู
             {
                 isLookingAtDoor = true; // กำลังมองที่ประตู
                 currentDoor = hit.collider.gameObject; // เก็บ GameObject ของประตูที่มองอยู่
@@ -42,8 +43,17 @@ public class DoorOpen : MonoBehaviour
 
     public void OpenDoor(GameObject door)
     {
-        // ทำการเปิดประตู
-        door.SetActive(false); // ซ่อนประตู (หรือทำการเปิดประตูในแบบที่ต้องการ)
-        Debug.Log("Door opened: " + door.name);
+        Animator doorAnimator = door.GetComponent<Animator>(); // ดึง Animator จากประตู
+
+        if (doorAnimator != null)
+        {
+            doorIsOpen = true;
+            doorAnimator.SetTrigger("Open"); // เล่นแอนิเมชันที่ตั้งไว้ใน Animator
+            Debug.Log("Door opened: " + door.name);
+        }
+        else
+        {
+            Debug.LogWarning("No Animator found on the door: " + door.name);
+        }
     }
 }

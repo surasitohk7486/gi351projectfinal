@@ -8,6 +8,7 @@ TagManager:
   - Note
   - Door
   - DoorEnd
+  - MusicBox
   layers:
   - Default
   - TransparentFX
@@ -19,8 +20,8 @@ TagManager:
   - Mirror
   - Battery
   - Door
-  - 
-  - 
+  - MusicBox
+  - Key
   - 
   - 
   - 

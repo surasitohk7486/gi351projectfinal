@@ -9,6 +9,7 @@ public class EndScene : MonoBehaviour
     public float raycastDistance = 5f; // ระยะทางของ Raycast
     public string endSceneName = "EndScene"; // ชื่อฉากปลายทาง
     public TextMeshProUGUI interactText; // UI Text สำหรับแสดงข้อความ
+    [SerializeField] private FirstPersonController firstPersonController;
 
     private bool canInteract = false; // ใช้ตรวจสอบว่าผู้เล่นอยู่ในระยะหรือไม่
 
@@ -37,7 +38,7 @@ public class EndScene : MonoBehaviour
                 if (interactText != null)
                 {
                     interactText.gameObject.SetActive(true);
-                    interactText.text = "Press E to Open";
+                    
                 }
 
                 // ตรวจสอบการกดปุ่ม E
@@ -45,8 +46,15 @@ public class EndScene : MonoBehaviour
                 {
                     Debug.Log("Interacted with " + hit.collider.name);
 
-                    // เปลี่ยนไปยัง End Scene
-                    SceneManager.LoadScene(endSceneName);
+                    if (firstPersonController.hasKey == true)
+                    {
+                        SceneManager.LoadScene(endSceneName);
+                    }
+                    else
+                    {
+                        interactText.text = "You don't have key"; // แสดงข้อความ "ไม่มีคีย์"
+                        StartCoroutine(ResetInteractText()); // เรียก Coroutine เพื่อคืนค่าข้อความ
+                    }
                 }
 
                 return;
@@ -69,5 +77,11 @@ public class EndScene : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * raycastDistance);
         }
+    }
+
+    private IEnumerator ResetInteractText()
+    {
+        yield return new WaitForSeconds(2f);
+        interactText.text = "Press E to Open"; // คืนค่าข้อความ
     }
 }

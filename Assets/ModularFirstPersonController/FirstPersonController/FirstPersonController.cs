@@ -8,17 +8,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.VisualScripting;
+
 
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
     using System.Net;
 #endif
 
 public class FirstPersonController : MonoBehaviour
 {
-    private bool isLocked = false; // สถานะล็อก
+    private bool isLockedWheelChair = false; // สถานะล็อก
+    private bool isLockedMusicBox = false;
     private float lockDuration = 0f; // ระยะเวลาที่ล็อกผู้เล่น
     private float lockTimer = 0f; // ตัวจับเวลาการล็อก
+    public bool hasKey = false;
 
     private Vector3 lockedCameraRotation = Vector3.zero;
 
@@ -178,7 +182,7 @@ public class FirstPersonController : MonoBehaviour
 
     public void LockPlayer(float duration)
     {
-        isLocked = true;
+        isLockedWheelChair = true;
         lockDuration = duration;
         lockTimer = duration;
 
@@ -191,6 +195,33 @@ public class FirstPersonController : MonoBehaviour
         {
             lockedCameraRotation = Vector3.zero;
             playerCamera.transform.localEulerAngles = lockedCameraRotation;
+        }
+    }
+
+    public void LockPlayerUntil(float duration, Vector3 lookDirection)
+    {
+        isLockedMusicBox = true;
+        lockTimer = duration;
+
+        // หยุดการเคลื่อนไหวของผู้เล่น
+        playerCanMove = false;
+        cameraCanMove = false;
+
+        // คำนวณการหมุน
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+
+            // ตั้งค่า Rotation X เป็น 0
+            Vector3 eulerRotation = targetRotation.eulerAngles;
+            eulerRotation.x = 0; // กำหนดแกน X ให้เป็น 0
+            transform.rotation = Quaternion.Euler(eulerRotation);
+        }
+
+        // ตั้งค่ากล้องให้อยู่ตรงตำแหน่ง (0, 0, 0) ในกรอบการหมุนของตัวละคร
+        if (playerCamera != null)
+        {
+            playerCamera.transform.localEulerAngles = Vector3.zero;
         }
     }
 
@@ -437,9 +468,14 @@ public class FirstPersonController : MonoBehaviour
 
         #endregion
 
-        if (isLocked)
+        if (isLockedWheelChair)
         {
             lockTimer -= Time.deltaTime;
+
+            if (audioSource != null && audioSource.isPlaying)
+            {
+                audioSource.Stop(); // หยุดเสียงการเคลื่อนไหว
+            }
 
             // บังคับให้มองไปในแกน Z
             Vector3 forwardDirection = new Vector3(0, 0, 1); // มองไปทาง Z
@@ -452,9 +488,27 @@ public class FirstPersonController : MonoBehaviour
 
             if (lockTimer <= 0f)
             {
-                isLocked = false;
+                isLockedWheelChair = false;
 
                 // คืนค่าความสามารถในการเคลื่อนไหว
+                playerCanMove = true;
+                cameraCanMove = true;
+            }
+        }
+
+        if (isLockedMusicBox)
+        {
+            lockTimer -= Time.deltaTime;
+
+            // หยุดเสียงเดิน
+            if (audioSource != null && audioSource.isPlaying)
+            {
+                audioSource.Stop(); // หยุดเสียงการเคลื่อนไหว
+            }
+
+            if (lockTimer <= 0f)
+            {
+                isLockedMusicBox = false;
                 playerCanMove = true;
                 cameraCanMove = true;
             }
