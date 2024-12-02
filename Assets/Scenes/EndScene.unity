@@ -462,6 +462,7 @@ GameObject:
   - component: {fileID: 873964102}
   - component: {fileID: 873964101}
   - component: {fileID: 873964103}
+  - component: {fileID: 873964104}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -592,6 +593,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &873964104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873964100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c94d32dc80b324f9339ef2a927ad6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &972925781
 GameObject:
   m_ObjectHideFlags: 0
