@@ -10,6 +10,8 @@ public class MusicBox : MonoBehaviour
     [SerializeField] private float interactionDistance = 5f;
     [SerializeField] private bool isOpen = false;
 
+    [SerializeField] private GameObject light;
+
     private GameObject currentMusicBox;
 
     private void Update()
@@ -58,6 +60,7 @@ public class MusicBox : MonoBehaviour
             }
             else
             {
+                light.SetActive(true);
                 Debug.Log("Music playing");
                 // ล็อกผู้เล่นให้หันไปที่ MusicBox
                 Vector3 directionToMusicBox = (musicBox.transform.position - playerController.transform.position).normalized;
