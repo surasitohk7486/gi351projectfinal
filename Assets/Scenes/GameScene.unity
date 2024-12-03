@@ -20520,7 +20520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 2
+  interactionDistance: 7
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -20927,7 +20927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 2
+  interactionDistance: 7
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -21666,7 +21666,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 5
+  interactionDistance: 7
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -38954,6 +38954,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: e2836e67c1a1e754fb1671a5d0e86bc5, type: 3}
     - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
+      propertyPath: enableCrouch
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4459864850019384740, guid: 6bacecc4f3df9584198879c73a6b6c36, type: 3}
       propertyPath: enableSprint
       value: 0
       objectReference: {fileID: 0}
@@ -45024,7 +45028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 5
+  interactionDistance: 7
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -59742,7 +59746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 5
+  interactionDistance: 7
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -66871,7 +66875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 2
+  interactionDistance: 7
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -68189,7 +68193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 1915726247}
-  interactionDistance: 2
+  interactionDistance: 5
   noteLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -80619,7 +80623,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 4}
+  m_Size: {x: 1, y: 1, z: 5}
   m_Center: {x: -23, y: 1, z: -4}
 --- !u!4 &2038538147 stripped
 Transform:
@@ -80857,8 +80861,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.99214005, y: 1.3932655, z: 1.0140531}
-  m_Center: {x: 0.21085024, y: 0.19663385, z: 0.0070266323}
+  m_Size: {x: 0.7921401, y: 1.3932655, z: 0.9}
+  m_Center: {x: 0.2, y: 0, z: 0}
 --- !u!1 &2041234114 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9017301806527300416, guid: 1a97b9fb7deeea64eba92efce5381cc3, type: 3}

@@ -10,9 +10,9 @@ public class PauseGame : MonoBehaviour
     private bool isPaused = false;
     [SerializeField] PadInteract padInteract;
 
+
     private void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.Escape) && padInteract.isActive == false)
         {
             if (isPaused)
@@ -43,6 +43,7 @@ public class PauseGame : MonoBehaviour
         Time.timeScale = 0f; // หยุดเวลาในเกม
         AudioListener.pause = true; // หยุดเสียงทั้งหมดในเกม
         isPaused = true;
+
 
         // ปิดการควบคุมตัวละครหรือระบบอื่นๆ
         DisablePlayerControls();
