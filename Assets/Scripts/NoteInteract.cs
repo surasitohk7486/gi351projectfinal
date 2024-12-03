@@ -88,6 +88,7 @@ public class NoteInteract : MonoBehaviour
 
     private void StopReading()
     {
+        PlayInteractSound();
         isReading = false;
         Destroy(currentNoteUI); // ทำลาย UI โน้ตปัจจุบัน
         playerController.enabled = true;
