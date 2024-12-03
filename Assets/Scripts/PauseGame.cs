@@ -8,10 +8,12 @@ public class PauseGame : MonoBehaviour
     [SerializeField] private GameObject pauseMenuUI; // อ้างอิง UI Panel
     [SerializeField] private GameObject player; // ตัวละครผู้เล่น
     private bool isPaused = false;
+    [SerializeField] PadInteract padInteract;
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        
+        if (Input.GetKeyDown(KeyCode.Escape) && padInteract.isActive == false)
         {
             if (isPaused)
             {
@@ -28,7 +30,7 @@ public class PauseGame : MonoBehaviour
         {
             EnableCursor();
         }
-        else
+        else if (padInteract.isActive == false)
         {
             DisableCursor();
         }

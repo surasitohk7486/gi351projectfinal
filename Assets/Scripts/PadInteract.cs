@@ -17,7 +17,7 @@ public class PadInteract : MonoBehaviour
     public GameObject door; // ประตูที่จะเปิด
     private string currentInput = ""; // รหัสที่ผู้เล่นกำลังกรอก
 
-    private bool isActive = false; // ตรวจสอบว่า UI กำลังเปิดอยู่หรือไม่
+    public bool isActive = false; // ตรวจสอบว่า UI กำลังเปิดอยู่หรือไม่
     private bool isLookingAtPad = false; // ตรวจสอบว่าผู้เล่นกำลังมองแพด
 
     public Camera playerCamera; // กล้องของผู้เล่น
@@ -51,6 +51,8 @@ public class PadInteract : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E) && !isActive)
             {
                 OpenCodeUI(); // เปิด UI สำหรับใส่รหัส
+                Cursor.lockState = CursorLockMode.None; // ปลดล็อก Cursor
+                Cursor.visible = true; // ทำให้ Cursor มองเห็นได้
             }
         }
         else
@@ -59,7 +61,7 @@ public class PadInteract : MonoBehaviour
             feedbackText.gameObject.SetActive(false); // ซ่อนข้อความ "กด E เพื่ออินเทอร์แอค"
         }
 
-        if (isActive && Input.GetKeyDown(KeyCode.E)) // กด E เพื่อปิด UI
+        if (isActive && Input.GetKeyDown(KeyCode.Escape)) // กด E เพื่อปิด UI
         {
             CloseCodeUI();
         }
@@ -78,9 +80,6 @@ public class PadInteract : MonoBehaviour
         {
             flashlightController.LockFlashlight(true);
         }
-
-        Cursor.lockState = CursorLockMode.None; // ปลดล็อก Cursor
-        Cursor.visible = true; // ทำให้ Cursor มองเห็นได้
         Debug.Log("Code UI opened successfully.");
     }
 
