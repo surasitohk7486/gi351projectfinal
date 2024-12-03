@@ -12,6 +12,8 @@ public class DummyInteract : MonoBehaviour
     [SerializeField] private GameObject objectToActivate2;
     [SerializeField] private GameObject objectToDeactivate; // Object ที่ต้องการให้หายไป (ซ่อนหรือทำลาย)
     [SerializeField] private AudioSource audio;
+    [SerializeField] private BlinkLight addBlinkLight;
+    [SerializeField] private Light light;
 
     int count = 0;
 
@@ -35,9 +37,8 @@ public class DummyInteract : MonoBehaviour
                 currentInteractableObject = hit.collider.gameObject;
 
                 if (Input.GetKeyDown(KeyCode.E)) // หากผู้เล่นกด E
-                {
+                {   
                     InteractWithObjectAction(); // เรียกฟังก์ชัน Interact
-                    audio.Play();
                 }
             }
         }
@@ -54,6 +55,8 @@ public class DummyInteract : MonoBehaviour
         {
             objectToActivate.SetActive(true); // ทำให้ Object ที่ตั้งไว้ Active
             objectToActivate2.SetActive(true);
+            audio.Play();
+            addBlinkLight.AddLight(light);
         }
 
         if (objectToDeactivate != null)

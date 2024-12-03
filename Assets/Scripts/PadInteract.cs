@@ -59,7 +59,7 @@ public class PadInteract : MonoBehaviour
             feedbackText.gameObject.SetActive(false); // ซ่อนข้อความ "กด E เพื่ออินเทอร์แอค"
         }
 
-        if (isActive && Input.GetKeyDown(KeyCode.Escape)) // กด E เพื่อปิด UI
+        if (isActive && Input.GetKeyDown(KeyCode.E)) // กด E เพื่อปิด UI
         {
             CloseCodeUI();
         }
