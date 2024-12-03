@@ -22,6 +22,7 @@ public class FlashLight : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private GameObject pickupText;
     [SerializeField] private TextMeshProUGUI batteryPercentageText;
+    [SerializeField] private AudioSource sound;
 
     [SerializeField] private LayerMask batteryLayer;
 
@@ -112,6 +113,7 @@ public class FlashLight : MonoBehaviour
 
     public void IncreaseBattery(float amount)
     {
+        sound.Play();
         batteryLevel += amount;
         batteryLevel = Mathf.Min(batteryLevel, maxBatteryLevel); // ไม่ให้เกินค่าสูงสุด
     }
