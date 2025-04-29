@@ -68390,7 +68390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashlight: {fileID: 2052841417}
-  idPlayer: 0
+  idPlayer: 2
   fTimeSpent: 0
   on: 0
   off: 0
@@ -68428,12 +68428,6 @@ MonoBehaviour:
   playerController: {fileID: 1720935009}
   flashlightController: {fileID: 1720935016}
   interactSound: {fileID: 1720935029}
-  note1: {fileID: 799385259}
-  note2: {fileID: 1664464431}
-  note3: {fileID: 825018196}
-  note4: {fileID: 1319895686}
-  note5: {fileID: 863523100}
-  note6: {fileID: 1567221346}
 --- !u!114 &1720935022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68769,6 +68763,7 @@ MonoBehaviour:
   endSceneName: EndScene
   interactText: {fileID: 1176442916}
   firstPersonController: {fileID: 1720935009}
+  flashlight: {fileID: 0}
 --- !u!114 &1720935035
 MonoBehaviour:
   m_ObjectHideFlags: 0
