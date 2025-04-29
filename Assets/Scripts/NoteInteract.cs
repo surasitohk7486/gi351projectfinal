@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Services.Core;
+using Unity.Services.Analytics;
 
 public class NoteInteract : MonoBehaviour
 {
@@ -16,9 +18,17 @@ public class NoteInteract : MonoBehaviour
     private bool isReading = false; // ตรวจสอบว่าผู้เล่นกำลังอ่านอยู่
     private GameObject currentNoteUI; // UI ของโน้ตที่แสดงผลอยู่
 
+    private int count1 = 0;
+    private int count2 = 0;
+    private int count3 = 0;
+    private int count4 = 0;
+    private int count5 = 0;
+    private int count6 = 0;
+
     void Start()
     {
         interactionUI.SetActive(false);
+        Initialize();
     }
 
     void Update()
@@ -68,6 +78,50 @@ public class NoteInteract : MonoBehaviour
         // แสดง UI ของโน้ต
         currentNoteUI = Instantiate(noteData.noteUIPrefab);
 
+        Debug.Log(currentNoteUI);
+
+        if(noteData.noteTitle == "1" && count1 == 0)
+        {
+            Debug.Log("Note1");
+            NotesInGame("1",flashlightController.idPlayer,1);
+            count1++;
+        }
+
+        if (noteData.noteTitle == "2" && count2 == 0)
+        {
+            Debug.Log("Note2");
+            NotesInGame("2", flashlightController.idPlayer, 1);
+            count2++;
+        }
+
+        if (noteData.noteTitle == "3" && count3 == 0)
+        {
+            Debug.Log("Note3");
+            NotesInGame("3", flashlightController.idPlayer, 1);
+            count3++;
+        }
+
+        if (noteData.noteTitle == "4" && count4 == 0)
+        {
+            Debug.Log("Note4");
+            NotesInGame("4", flashlightController.idPlayer, 1);
+            count4++;
+        }
+
+        if (noteData.noteTitle == "5" && count5 == 0)
+        {
+            Debug.Log("Note5");
+            NotesInGame("5", flashlightController.idPlayer, 1);
+            count5++;
+        }
+
+        if (noteData.noteTitle == "6" && count6 == 6)
+        {
+            Debug.Log("Note6");
+            NotesInGame("6", flashlightController.idPlayer, 1);
+            count6++;
+        }
+
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas != null)
         {
@@ -105,5 +159,24 @@ public class NoteInteract : MonoBehaviour
         {
             interactSound.Play();
         }
+    }
+
+    private async void Initialize()
+    {
+        await UnityServices.InitializeAsync();
+        AnalyticsService.Instance.StartDataCollection();
+    }
+
+    private void NotesInGame(string numNotes, int numPlayer,float seeNotes)
+    {
+        CustomEvent notesInGame = new CustomEvent("NotesInGame")
+        {
+            {"NumNotes",numNotes},
+            {"Player",numPlayer},
+            {"SeeNotes",seeNotes}
+        };
+
+        AnalyticsService.Instance.RecordEvent(notesInGame);
+        Debug.Log($"Recording Event NotesInGame {numNotes}");
     }
 }

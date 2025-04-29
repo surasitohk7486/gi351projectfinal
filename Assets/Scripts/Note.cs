@@ -7,6 +7,7 @@ public class Note : MonoBehaviour
     public Camera playerCamera;
     public float interactionDistance = 5f; // ระยะตรวจจับ
     public LayerMask noteLayer;
+    public int idNote;
 
     public NoteData noteData; // เก็บข้อมูล ScriptableObject สำหรับโน้ตนี้
     public GameObject particle;

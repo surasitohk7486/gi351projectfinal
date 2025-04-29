@@ -6,6 +6,9 @@ using UnityEngine;
 public class FlashLight : MonoBehaviour
 {
     [SerializeField] private GameObject flashlight;
+    public int idPlayer = 0;
+
+    public float fTimeSpent = 0f;
 
     [SerializeField] private bool on;
     [SerializeField] private bool off;
@@ -66,7 +69,9 @@ public class FlashLight : MonoBehaviour
             batteryLevel -= batteryConsumptionRate * Time.deltaTime;
             batteryLevel = Mathf.Max(batteryLevel, 0); // ไม่ให้แบตเตอรี่ติดลบ
 
-            if (batteryLevel == 0)
+            fTimeSpent += batteryConsumptionRate * Time.deltaTime; ;
+
+            if (batteryLevel <= 0)
             {
                 flashlight.SetActive(false); // ปิดไฟฉายเมื่อแบตหมด
                 PlaySound(flashlightOffSound);

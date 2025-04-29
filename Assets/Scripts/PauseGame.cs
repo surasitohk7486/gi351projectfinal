@@ -10,6 +10,8 @@ public class PauseGame : MonoBehaviour
     private bool isPaused = false;
     [SerializeField] PadInteract padInteract;
 
+    public int numPlayer = 0;
+
 
     private void Update()
     {
