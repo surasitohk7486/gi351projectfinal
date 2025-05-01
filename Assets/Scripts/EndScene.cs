@@ -114,13 +114,13 @@ public class EndScene : MonoBehaviour
 
     private void UseBattery(int numPlayer, float useBattery)
     {
-        CustomEvent notesInGame = new CustomEvent("NotesInGame")
+        CustomEvent batteryUse = new CustomEvent("BatteryUse")
         {
             {"Player",numPlayer},
             {"UsageRateBattery",useBattery}
         };
 
-        AnalyticsService.Instance.RecordEvent(notesInGame);
+        AnalyticsService.Instance.RecordEvent(batteryUse);
         Debug.Log($"Recording Event NotesInGame {useBattery}");
     }
 }
