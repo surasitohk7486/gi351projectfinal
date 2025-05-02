@@ -115,7 +115,7 @@ public class NoteInteract : MonoBehaviour
             count5++;
         }
 
-        if (noteData.noteTitle == "6" && count6 == 6)
+        if (noteData.noteTitle == "6" && count6 == 0)
         {
             Debug.Log("Note6");
             NotesInGame("6", flashlightController.idPlayer, 1);
